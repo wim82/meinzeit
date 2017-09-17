@@ -1,0 +1,24 @@
+{
+  "name": "meinzeit",
+  "version": "1.0.0",
+  "description": "its mein zeit, aber ja!",
+  "engines": {
+    "node": "8.4.x"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start": "node index.js",
+    "develop": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "disconnect": "^1.2.1",
+    "express": "^4.15.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1",
+    "now-env": "^1.4.0"
+  }
+}

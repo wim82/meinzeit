@@ -1,0 +1,7 @@
+{
+    "env": {
+        "DISCOGS_TOKEN": "@discogs_token",
+        "CONSUMER_KEY": "@consumer-key",
+        "CONSUMER_SECRET": "@consumer-secret"
+    }
+}
