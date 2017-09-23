@@ -15,7 +15,9 @@
   "license": "ISC",
   "dependencies": {
     "disconnect": "^1.2.1",
-    "express": "^4.15.4"
+    "express": "^4.15.4",
+    "express-http-proxy": "^1.0.6",
+    "http-proxy-middleware": "^0.17.4"
   },
   "devDependencies": {
     "nodemon": "^1.12.1",
