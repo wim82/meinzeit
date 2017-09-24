@@ -3,30 +3,28 @@ let collection, discs = [];
 
 module.exports.getDiscs = () => discs;
 
-module.exports.load = () => {
+module.exports.load = async() => {
     collection = new Discogs({
-        method: 'oauth',
-        level: 2,
-        consumerKey: 'ePSerhfKqYsfWecXUWtJ',
-        consumerSecret: 'lJHCOSEnCOEakHBqXIJCmLrUGtSEurLz',
-        token: 'EPUKEAzRFAGaJJQrDlENKtUGXSZqxIRFDGzCgbFJ',
-        tokenSecret: 'AVKoONNecLnuwzgIJAhliPqvFhRfarSwWUSxSuLk'
+        userToken: process.env.DISCOGS_TOKEN
     }).user().collection();
 
-    fetchDiscsFromPage(1);
-    console.log('i have loaded');
+    let getMore = true;
+    let pageNumber = 1;
+    //limiting pageNumber to 50 to make really sure i don't spin off into an endless loop.
+    while (getMore && pageNumber < 50) {
+        getMore = await fetchDiscsFromPage(pageNumber++);
+    }
 
+    console.info('Loaded', discs.length, 'records');
 }
 
-
-
 function fetchDiscsFromPage(pageNumber) {
-    collection.getReleases('wim82', 39994, {
+    return collection.getReleases('wim82', 39994, {
         page: pageNumber,
         per_page: 100
     }).then(data => {
-        console.log('done fetching page', pageNumber);
+        //storing discs in memory
         discs = discs.concat(data.releases);
-
+        return data.pagination.urls.next;
     }).catch(err => console.log(err));
 }

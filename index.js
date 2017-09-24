@@ -31,15 +31,132 @@ app.get('/', function (req, res) {
     <h1>Random Discogs</h1><p>Sorry - got no image for you</p>
     `;
 
-    console.log();
-
     //get randomImage from all discs
     if (discs.length > 0) {
+        let record = discs[Math.floor(Math.random() * discs.length)];
+        console.log(record.basic_information);
+        let image = record.basic_information.cover_image;
+        let artist = record.basic_information.artists
+            .reduce((artist, item, index, arr) => {
+                var join = arr.length - 1 !== index ? item.join : '';
+                return artist + item.name + ' ' + join + ' ';
+            }, '');
+        let title = record.basic_information.title;
 
-        let image = discs[Math.floor(Math.random() * discs.length)].basic_information.cover_image;
-        html = `
-        <h1>Haaallo</h1><img src="${image}">
-    `
+        html =
+            `
+            <!DOCTYPE html>
+            <html lang="en">
+            
+            <head>
+                <title></title>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <style>
+                    body {
+                        margin: 0;
+                        padding: 0;
+                        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+                    }
+            
+                    @keyframes colorchange {
+                        0% {
+                            background: lightgray;
+                        }
+                        50% {
+                            background: aliceblue;
+                        }
+                        100% {
+                            background: lightgray;
+                        }
+                    }
+            
+                    .grid {
+                        display: flex;
+                        flex-direction: column;
+                        padding: 0;
+                        padding: 10px 20px;
+                    }
+            
+                    .page-title {
+                        width: 100%;
+                        max-height: 64px;
+                        margin: 0;
+                        padding: 10px 0;
+                    }
+            
+                    .record-cover {
+                        width: 100%;
+                        display: flex;
+                        flex: 1 1 auto;
+                        height: 340px;
+                    }
+            
+                    .record-cover>img {
+                        object-position: 0% 0%;
+                        object-fit: contain;
+                        max-height: 340px;
+                        max-width: 100%;
+                        background-color: lightgray;
+                        animation: colorchange 5s infinite;
+                    }
+            
+                    .details ul {
+                        list-style: none;
+                        padding: 20px 0;
+                        position: relative;
+                    }
+            
+                    .details ul:before {
+                        content: '';
+                        width: 20vw;
+                        height: 1px;
+                        background: lightgray;
+                        position: absolute;
+                        top: 5px;
+                    }
+            
+                    .details .artist {
+                        font-weight: 100;
+                        font-size: 1.5em;
+                    }
+            
+                    .details .title {
+                        font-weight: 300;
+                        font-size: 1.5em;
+                    }
+                </style>
+                <script>
+                    function removeBackgroundColor() {
+                        document.querySelector('.record-cover>img').style.animation = 'none';
+                        document.querySelector('.record-cover>img').style.backgroundColor = 'transparent';
+                    }
+            
+                    function loadNewImage() {
+                        console.log('need to load a new image');
+                        location.reload();
+                    }
+                </script>
+            </head>
+            
+            <body>
+                <div class="grid">
+                    <h1 class="page-title">Records</h1>
+                    <div class="record-cover" ontouchstart="loadNewImage();">
+                        <img width="340px" id="c" onload="removeBackgroundColor();" src="${image}"">
+                    </div>
+                    <div class="details">
+                        <ul>
+                        <li class="title">${title}</li>
+                        <li class="artist">${artist}</li>
+                        </ul>
+                    </div>
+                </div>
+            </body>
+            
+            </html>
+            
+            `
     }
 
     res.send(html);
@@ -47,39 +164,7 @@ app.get('/', function (req, res) {
 
 });
 
-
-//the crap i do
-app.get('/crap', function (req, res) {
-
-    //TODO: RECURSIVELY FETCH ALL RELEASES & STORE BASIC INFO IN MEMORY
-    //IF I HAVE THAT DB / FETCH RANDOM IMAGE FROM IT
-    //EVEN CRAZIER PUT ALL IMAGES ON NOW SERVER TO SERVE FASTER
-    //FIGURE OUT WHERE TO SPLIT SERVER & CLIENT APP
-
-    var col = new Discogs({
-        method: 'oauth',
-        level: 2,
-        consumerKey: 'ePSerhfKqYsfWecXUWtJ',
-        consumerSecret: 'lJHCOSEnCOEakHBqXIJCmLrUGtSEurLz',
-        token: 'EPUKEAzRFAGaJJQrDlENKtUGXSZqxIRFDGzCgbFJ',
-        tokenSecret: 'AVKoONNecLnuwzgIJAhliPqvFhRfarSwWUSxSuLk'
-    }).user().collection();
-    col.getReleases('wim82', 39994, {
-        page: 1,
-        per_page: 100
-    }, function (err, data) {
-        console.log('err,', err);
-        discs = data.releases.map((release) => release.basic_information.cover_image);
-        image = data.releases[getRandomInt(0, 100)].basic_information.cover_image;
-
-        res.send(`
-                <h1>Haaallo</h1><img src="${image}">
-            `);
-
-    });
-});
-
-//oAuth
+//oAuth; not really used at the moment, but good for later.
 app.get('/authorize', oAuth.authorize);
 app.get('/callback', oAuth.callback);
 
