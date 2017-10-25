@@ -24,7 +24,6 @@ module.exports.getRandomDiscs = (amount) => {
         randomDiscs.push(randomRecord);
         amount--;
     }
-    console.log('gonna return', randomDiscs);
     return randomDiscs;
 
 }

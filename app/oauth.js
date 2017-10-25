@@ -10,11 +10,12 @@ let reqData, accData;
 
 
 function authorize(req, res) {
-    console.log('gonna redirect to', req.get('host').replace(/localhost/g, '127.0.0.1') + '/callback');
+
     var oAuth = new Discogs().oauth();
     oAuth.getRequestToken(
         process.env.CONSUMER_KEY,
         process.env.CONSUMER_SECRET,
+        //make localhost work
         req.protocol + '://' + req.get('host').replace(/localhost/g, '127.0.0.1') + '/callback',
         function (err, requestData) {
             // Persist "requestData" here so that the callback handler can 
