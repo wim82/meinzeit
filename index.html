@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Records</title>
+    <link rel="manifest" href="./static/manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Android  -->
+    <meta name="theme-color" content="#07a3a3">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- iOS -->
+    <meta name="apple-mobile-web-app-title" content="Record Swiper">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        }
+
+        @keyframes loading-background-animation {
+            0% {
+                background: lightgray;
+            }
+            50% {
+                background: aliceblue;
+            }
+            100% {
+                background: lightgray;
+            }
+        }
+
+        .grid {
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+        }
+
+        .page-title {
+            max-width: 100vw;
+            max-height: 64px;
+            margin: 0;
+            padding: 10px 20px;
+        }
+
+        .record-cover {
+            display: inline-block;
+            height: 340px;
+        }
+
+
+        .record-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            white-space: nowrap;
+            width: 100%;
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
+            -webkit-scroll-snap-type: mandatory;
+            scroll-snap-type: x mandatory;
+            -webkit-scroll-snap-destination: 50% 50%;
+            scroll-snap-destination: 50% 50%;
+        }
+
+        .record-card {
+            width: calc(100vw - 40px);
+            vertical-align: top;
+            padding-right: 20px;
+            padding-left: 20px;
+            display: inline-block;
+            white-space: normal;
+            -webkit-scroll-snap-coordinate: 30% 50%;
+            scroll-snap-coordinate: 30% 50%;
+            scroll-snap-align: center;
+        }
+
+        .record-cover>img {
+            object-position: 0% 0%;
+            object-fit: contain;
+            height: 340px;
+            width: 340px;
+            animation: loading-background-animation 4s infinite;
+        }
+
+        .details ul {
+            list-style: none;
+            padding: 20px 0;
+            position: relative;
+        }
+
+        .details ul:before {
+            content: '';
+            width: 20vw;
+            height: 1px;
+            background: lightgray;
+            position: absolute;
+            top: 5px;
+        }
+
+        .details .artist {
+            font-weight: 100;
+            font-size: 1.5em;
+        }
+
+        .details .title {
+            font-weight: 300;
+            font-size: 1.5em;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="grid">
+        <h1 class="page-title">Records</h1>
+        <ul class="record-list" id="record-list">
+            <li class="record-card">
+                <div id="record-cover-container" class="record-cover">
+
+                </div>
+                <div class="details">
+                    <ul>
+                        <li class="title">&larr;</li>
+                        <li class="artist">swipe to browse</li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <script defer src="static/index.js"></script>
+</body>
+
+</html>

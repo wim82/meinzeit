@@ -3,6 +3,32 @@ let collection, discs = [];
 
 module.exports.getDiscs = () => discs;
 
+module.exports.getRandomDiscs = (amount) => {
+    let randomDiscs = [];
+
+    while (amount > 0) {
+        let record = discs[Math.floor(Math.random() * discs.length)];
+        let image = record.basic_information.cover_image;
+        let artist = record.basic_information.artists
+            .reduce((artist, item, index, arr) => {
+                var join = arr.length - 1 !== index ? item.join : '';
+                return artist + item.name + ' ' + join + ' ';
+            }, '');
+        let title = record.basic_information.title;
+        let randomRecord = {
+            artist: artist,
+            title: title,
+            image: image,
+        }
+
+        randomDiscs.push(randomRecord);
+        amount--;
+    }
+    console.log('gonna return', randomDiscs);
+    return randomDiscs;
+
+}
+
 module.exports.load = async() => {
     collection = new Discogs({
         userToken: process.env.DISCOGS_TOKEN

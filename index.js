@@ -1,7 +1,8 @@
 require('now-env').config();
 
-const express = require('express')
-const app = express()
+const express = require('express');
+const app = express();
+const path = require('path');
 const Discogs = require('disconnect').Client;
 const proxy = require('./app/proxy');
 
@@ -22,9 +23,13 @@ app.use('/static', express.static('static'));
 //proxy to the discogs api.. 
 app.use('/api', proxy.discogsProxy);
 
+app.get('/random', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(discStore.getRandomDiscs(10));
+});
 
 //the crap i do
-app.get('/', function (req, res) {
+app.get('crap/', function (req, res) {
     let discs = discStore.getDiscs();
 
     let html = `
@@ -163,6 +168,12 @@ app.get('/', function (req, res) {
 
 
 });
+
+
+app.get('/', function (req, res) {
+    res.sendFile(path.join(__dirname + '/index.html'));
+});
+
 
 //oAuth; not really used at the moment, but good for later.
 app.get('/authorize', oAuth.authorize);
